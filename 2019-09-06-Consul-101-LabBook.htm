@@ -1,0 +1,1121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0133)https://hashicorp-education.s3-us-west-2.amazonaws.com/courses/consul-101/HashiConfUS-Consul-1.5.3/2019-09-06-Consul-101-LabBook.html -->
+<html xmlns="http://www.w3.org/1999/xhtml" class="gr__hashicorp-education_s3-us-west-2_amazonaws_com"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta content="text/css" http-equiv="Content-Style-Type">
+<meta content="pandoc" name="generator">
+<title></title>
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  
+  /* Pandoc will embed these styles into the HTML
+  but that requires that it be defined in a style tag */
+  
+  body {
+    font-family: "Open Sans", "DejaVu Sans", sans-serf;
+  }
+  
+  @media screen {
+    body {
+      margin: 0 96px;
+      font-size: 16px;
+    }
+  }
+  
+  @media print {
+    body {
+      font-size: 9px;
+    }
+  }
+  
+  h1, h2, h3, h4, h5 {
+    font-family: "Klavika Basic", "DejaVu Sans", sans-serif;
+  }
+  
+  /* Draw thick line under headers to comply with HashiCorp style guide */
+  h1:after, h2:after {
+    content: " ";
+    border-bottom: 0.25em solid #ccc;
+    display: block;
+    width: 1em;
+  }
+  
+  /* When a paragraph is a sibling of an h1 and h2 - do not indent */
+  
+  h1 ~ p, h2 ~ p {
+    margin-left: 0;
+  }
+  
+  h3 ~ p, h4 ~ p {
+    margin-left: 7em;
+  }
+  
+  h1 + p, h1 + p + p, h1 + p + p + p {
+    margin-left: 0;
+  }
+  
+  h2 + p, h2 + p + p, h2 + p + p + p {
+    margin-left: 0;
+  }
+  
+  /* When a blockquote is a sibling of an h1 and h2 do not indent */
+  
+  h1 ~ blockquote, h2 ~ blockquote {
+    margin-left: 0;
+  }
+  
+  /* When a blockquote is a sibling of an h3 and h4 - ident */
+  
+  h3 ~ blockquote, h4 ~ blockquote {
+    margin-left: 7em;
+  }
+  
+  /* Blockquote Icon Styles */
+  
+  blockquote {
+    min-height: 40px;
+  }
+  
+  blockquote .icon {
+    width: 30px;
+    height: 30px;
+    float: left;
+  }
+  
+  blockquote p {
+    display: inline;
+  }
+  
+  /* Open Iconic - timer-8x.png */
+  blockquote .duration {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEwAACxMBAJqcGAAABWZJREFUeJztm11sFUUYhp+e0tJSqlJpsMZgUi34b0Co0RCJmhjUakQSjV6oxBsxEqPhxhv8jz8oGjVe6oUkoFFjJDFGMUS5gWAw/mKVakUMtlT0UBXh2K4X3554WHb3m5mdOSdG3mRuurvv+357dma++WbaRHGMeeDIw8yQ5E0eOCIPHHnw4TETpZDk/wUcewGNNtBoHHsBjTbQaPzvX8AUDxzJaaoDuARYAJwPLFOeXwV8GbeDHvw0BNOB24H3gL+Q3MC2VYAdwFrgQk++zvXEk4nZwIvA77gFndUeLOhrKrA69hcEXUjgh/EbeLX1FfB2KvAhsLAARy5uBfYRJvAI2FrA25LYmzbuOOE4YAPhAq+2uxy8lZBuMwHc5xKchl5gkPDBV7Bf/Z0IvBs//7JjfLmYD4wQPvgI2GjprR/4IX52M9BiG5yWB5wHbAJm2BIDX8emdiBfzwgyW1SQXKEHmIvkC5cDZwDrLPhXAM8CrcA3SL+vOPjMRC/wM3a/4CjwKBKYLc4C2gzumwa8UqM5BpzuoJeLDuAzzAP/Dbg3NhcSfcDnNbqHkKzTO9ZhHvwbwKwQJhJYCpQT2reEEFqGWeB/AytDGEigGXg8Rf+REGLHY9bvDwLXhjCQwCxkIE3qv0qgWmHam06bqwdCiCdwMfBTiv5WzAZLa5yM/LLaC1gRQjyBu0lfZwwTcLx5LEUw2TaEEo/RAazP0C4DZ4cSbkfm07zgx5C0MxTmAF9kaFeAKwJqc2OGcL0+/es5eoqrbXcY8rQBtwHbkWqUMV7PEY+APUjK6RvNwBOK9tMGPL3AGuCXmufWmJpoBf5QTIRYYs5E1hl5um+RXbgtIbPRO8BkyrO7TI1cpJiYAE6xicwAC/h3FZfVPiY/tZ5NeuC17TQTM6sUkiIVmjQsRy+c7kZWixq2KzzLNYIScI5yz2YDIyZoQeqILyFFyyyMI5/2XgPO95XrF5gY20L+W/RRX+sGPlJ0ImR9caUF73UK3wcmJFpf1L4QDTMwL6fdacl9psI3ZELyq0JSNPl5UuG3me6SOEHhLJuQaLX9ovO/SWHlTdz2KZsV3gkTEu0FWBcaE8hKb2tnmXZH7laF+5BGUEJG3TxMdzRXxaaca0NIXcF1U7RTuX7AhGSY/LfoUuCsRTcyryd5Ryi2BQb6IPidRlACflTumVPMI/uQ4sZ6ZFAqIxWdfuDbgtzaj7NbI5iCTFGLcu6Zh/2GRRJ7gJsLcqRhnnJ9UCMoAV8p91xqbKf+uEy5vtOEpJ/8fnSYsIUQV3QjhZI870apcDP5xQiXDK0eWEm+5/1Y5BZaQWSnDVkdUEJPr63ql9qiIgJu8OPdC25C92tVum9BP/UxjHvG5hMdyNSd53UUhxNwDymkEXKCq9F4Dt3nahfiLiQtziOepD5bYllYmuGrtpWRVaITHjYQGEdqevVGP2bH8e4vIjINfW0QIePF/CJClliIvnETIYurwvuGAwZCEbLSuqqomAGuQe+a1bbEl+gLhoKTSMUnxG5tG/AUeum72p7xKT4VqcubCEfIJoSvwbEJyUuGLPS3UbxwcxR6kPW0qYkI+AQ5SepSROlE6vifWmruIuCWeR/2J8UiZKvtbeAeYDFwEkee6GiK/7YYOVy1EfjTQWcvhrs/RdAHfO9gLm28GI+bab/WfvngwVfRg92YELptoz4n045AK/B8QeM+2loCDHg2uBo/XcLlk/c2zxdFO7J4OkD4wMtIehvkZFhRdAEPEOYfKEaRVZ3zwqaeaEESodfQ9xrz2n6kkjOAn/9oUxHitGUJWSgtQjYu5iKnOTqR/zoB6TrjSN1+ECm5bUESqckAnjLxDxGOYgWwAaOvAAAAAElFTkSuQmCC');
+    background-repeat: no-repeat;
+    background-size: 30px 30px;
+  }
+  
+  /* Open Iconic - bookmark-8x.png */
+  blockquote .note {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAPlJREFUeJzt0MGugkAQBVH0y9sv142duND3lBk4kNxKWNJTty7LOPcJN0a4jPx8nWVxVhJAC2gSQAtoEkALaBJAC2gSQAtoEkALaBJAC2gSQAtoEkALaBJAC2gSQAtoEkALaBJAC2gSQAtoEkALaBJAC2gSQAtoEkALaBJAC2gSQAtoEkALaBJAC2gSQAtodIDb8zs195VfvdyogTuc0fFNrbzFmTG+qRX3OLPGN/XjTc7M8U39cJcze3xTX97mbDG+qS/uc7Ya39Q/b3C2HN/UH+9wth7f1Ie3OHuMb+rNe5y9xje1HDRA7fhmLQcLUODdWg4SoM789gMpCuKSDQ0BpwAAAABJRU5ErkJggg==');
+    background-repeat: no-repeat;
+    background-size: 30px 30px;
+  }
+  
+  /* Open Iconic - puzzle-piece-8x.png */
+  blockquote .puzzle {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAoVJREFUeJztm09LFVEYxn/qNXMRbVxEaUpB66BVQVAWKn6CCLWgRYs+SNCXiP5In0BIwYRAaBO0DvXqtaJFqxZqXfuzOA50JZg58z7je52ZH7y7897nOc+ZGc8dzwU908ArYBNoH1QTmAcmC9DrGkaAt8CflHoDnHPyWBgjwDbpk09qCzjr4rQgsqz84Vp2cVoA08RPPqkJB78d9Ao+Y9bQOyPQd2eT/FfA+tHb7aRH8BltoGHoPSHwkBvFLbDv1CtBEcAHQ+97gb4JRQDPDb3PBPrunARaxD8Amzjf/0ruEx/AXQ+jRdEHbJB98h/R3H5mVCZ+AYsR41eA3yJtE8pV+B4x9ptQ10QP4ZI8zpg2c11xH3pSB+BtwJs6AG8D3tQBeBvwpg7A24A3dQDeBrypA/A24E0dgLcBb8oYwCDwCHgH7JHhfELef2t1SyU0gAfA55TxHecTyvBG6AlwGpgCRjP2tICrwBfwX0GvWoZyXAEWJsv4EIxhpupXwEbVA2hX/RYo5UYohlbVA1it+jPgNvhvSLxqCcqxEXoMDAHjwMWMPU3gGvAV/FfCWgm9hEObWynjl4Az/6bhPQFVAAkDwENgFdgBfgJrhANZt/4zXm5oAbhD+GbWOKgxwpmg10cQQDQqIy3gega9m8Anoa4Z1eSHIzTPk/7i4lgFkGXlDzMu0jZjNbBg0F4U6JtQbIVfGHpfCvTNWFdg1KB9QaBvQrET7Cf/sfd+wt9pC+7H5PL+WMLaK0ERwGVD7xWBvglFAHOG3nsCfTPWh9Au4YeTsYwBPwT6ZhSbkac5dOdF2mYUJvYJK5qVS4Qj9u4BqN4J9gE3IsZPCbVNKE0MRYw9JdQ18RflJfuLoJNwrgAAAABJRU5ErkJggg==');
+    background-repeat: no-repeat;
+    background-size: 30px 30px;
+  }
+  
+  /* Open Iconic - warning-8x.png */
+  blockquote .warning {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAw5JREFUeJztm0+ITVEcxz8z80ymaSbDqFGjRg2FYjazYYPSlNiwmRKlWBjChs1srGRjgQ2bt7GSkgUWWLBhoRRqLFhQlEKjKaFp5ljcbqF57/z7/c6585pPnd2d876f7z3v3tPc+0CXEWAaMA3GFNCtnCErt2gsX46JbOmUWQvMYi/gDdCWKaMqF7HLl2MsU0Y1uoBvuBdwL09MPY7hLm+AeWB9lqRKvMavAANcyZJUgV34yxtgBujNkFecO4QVYIDTGfKKsg6YI7yAd0B78tSCXCJcvhx7k6cWohv4TnwBD1MHl2KCePlybEqcPZo2ii2tVAHX0saPZww5eQP8APqSGkRyH9kCDHA2qUEEGyi2stIFvAc60mmEcxV5+XLsT+gRRC/FFlargMfJTAI5g558ObYms/GknWLrql1APZWQL/vQlzfAT6A/kZMXj0hTgAEmEzk5s5l08gb4CNSSmDlyHffwNlznGRc1iKCPYquauoCnkhIxnMNv+drwmWtU0COIDuAD+Qq4IacSxgH8L2A2fOb6DQyI2QTwZIFQKQswwHkpGV9GHMKlKOAz0Cnk5EU9IKxGAQY4JOTkzGrgV2BYGyFzPpfRcmcyMKhWAQbYJmLmQA34FBHURui8NyXkXBiPCKlZwCwwKOBn5VlESM0CDHBBwK8po5EBtQv4AiyPEbQ9iKz609p+4KDW5AMUW88qrwADvIyRbLYCjiOz44otyMYWYIfAPP/QSbHljD07qcZt6QIOV0DKZ8wBQyGijR491YE1IRNmoo2ihAcSk20n/xkNGdMEvHe80EWw6re+Rqyg+OpGMYjb+71VHVN4vnf8/wo4QcX+/+7JRmB36B93AV+RPys2pD/vbmgBRxXC5ChgHhgOKeBVixRggMu+8juVguQqYAbocREvL4KnXA5eRPQAR1wPHiLu/d4qrgADvMXhltgOnGSRv6DcgGFgj8uBGre+KqwAQ/GrtabUgFUOIWNwKUEL6+2wFZf+3yyzHdDqBVhZKiB3gNwsFZA7QG5qFL/0WJk7iBIvbAf8AW0/FptCfrrPAAAAAElFTkSuQmCC');
+    background-repeat: no-repeat;
+    background-size: 30px 30px;
+  }
+  
+  blockquote {
+    border: none;
+    background-color: #FFF9EA;
+    border-top: 1px solid #e1cc89;
+    border-bottom: 1px solid #e1cc89;
+    padding: 4px;
+    margin-left:  7em;
+    margin-right: 1px;
+  }
+  
+  blockquote p {
+    margin-left: 0px;
+  }
+  
+  .logo {
+    width: 100px;
+  }
+  
+  pre {
+    margin-left: 7em;
+    border: none;
+    background-color: #eee;
+    padding: 1em;
+  }
+  
+  /*
+    A code block that is labeled as `shell` will automatically
+    include the $ prompt character.
+  
+    This is useful because this before creates an element that is
+    not in the code part which is useful for the selection code ahead.
+  */
+  pre.shell code:before {
+    content: "$";
+    padding-right: 5px;
+  }
+  
+  /*
+    A code block that is labeled as `shell` will have text that
+    when clicked will select all of the text.
+  */
+  pre.json code, pre.shell code {
+    -moz-user-select: all;
+    -webkit-user-select: all;
+    -ms-user-select: all;
+    user-select: all;
+  }
+  
+  .header {
+    background-color: black;
+    font-family: "Klavika Basic", "DejaVu Sans", sans-serif;
+  }
+  
+  .header img {
+    height: 1.5em;
+    margin: 0.25em 0.5em;
+  }
+  
+  h2 {
+    margin-top: 3em;
+  }
+  
+  code {
+    white-space: normal;
+    background: #eee;
+  }
+  
+  p code {
+    white-space: normal;
+    background: #eee;
+    padding: 2px;
+  }
+  
+  pre code {
+    font-size: 0.9em;
+    white-space: pre;
+    background: inherit;
+  }
+  
+  
+  h3 + ul, h3 + p + ul, h3 + p + p + ul, h3 + ol, h3 + p + ol, h3 + p + p + ol {
+    margin-left: 7em;
+  }
+  
+  a[href]:after { content : "" }
+  
+  /* Markdown images will appear within a figure class element */
+  
+  .figure {
+    margin-left: 7em;
+    margin-right: 0;
+  }
+  
+  img {
+    max-width: 100%;
+  }
+  
+  .figure p {
+    margin-left: 0;
+    margin-right: 0;
+    text-align: center;
+    font-style: italic;
+    padding: 4px;
+    background-color: #DDD;
+  }
+  
+  /* Terminal Window Styles */
+  
+  .window {
+    margin: 0 auto 30px 7em;
+    background: linear-gradient(
+      rgba(211, 211, 211, 1),
+      rgba(200, 200, 200, 1) 21px,
+      #ededed,
+      #ededed 23px
+    );
+    border-radius: 3px;
+    text-align: left;
+    z-index: 0;
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  .window .container {
+    margin-left: 0;
+    border-radius: 0;
+  }
+  
+  .window h1.titleInside {
+    margin: 0;
+    color: #3c3c3c;
+    font-size: 14px;
+    padding: 0 5px;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-transform: unset;
+  }
+  
+  .window .container .terminal pre {
+    margin: 0;
+    background: #272822;
+    color: #fff;
+    white-space: pre-line;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+  }
+  
+  /* Syntax Highlighting for shell code blocks */
+  
+  .shell .highlight .hll { background-color: #49483e }
+  .shell .highlight  { color: #f8f8f2; background: #272822; }
+  .shell .highlight .c { color: #75715e } /* Comment */
+  .shell .highlight .err { color: #960050; background-color: #1e0010 } /* Error */
+  .shell .highlight .k { color: #66d9ef } /* Keyword */
+  .shell .highlight .l { color: #ae81ff } /* Literal */
+  .shell .highlight .n { color: #f8f8f2 } /* Name */
+  .shell .highlight .o { color: #f92672 } /* Operator */
+  .shell .highlight .p { color: #f8f8f2 } /* Punctuation */
+  .shell .highlight .ch { color: #75715e } /* Comment.Hashbang */
+  .shell .highlight .cm { color: #75715e } /* Comment.Multiline */
+  .shell .highlight .cp { color: #75715e } /* Comment.Preproc */
+  .shell .highlight .cpf { color: #75715e } /* Comment.PreprocFile */
+  .shell .highlight .c1 { color: #75715e } /* Comment.Single */
+  .shell .highlight .cs { color: #75715e } /* Comment.Special */
+  .shell .highlight .gd { color: #f92672 } /* Generic.Deleted */
+  .shell .highlight .ge { font-style: italic } /* Generic.Emph */
+  .shell .highlight .gi { color: #a6e22e } /* Generic.Inserted */
+  .shell .highlight .gs { font-weight: bold } /* Generic.Strong */
+  .shell .highlight .gu { color: #75715e } /* Generic.Subheading */
+  .shell .highlight .kc { color: #66d9ef } /* Keyword.Constant */
+  .shell .highlight .kd { color: #66d9ef } /* Keyword.Declaration */
+  .shell .highlight .kn { color: #f92672 } /* Keyword.Namespace */
+  .shell .highlight .kp { color: #66d9ef } /* Keyword.Pseudo */
+  .shell .highlight .kr { color: #66d9ef } /* Keyword.Reserved */
+  .shell .highlight .kt { color: #66d9ef } /* Keyword.Type */
+  .shell .highlight .ld { color: #e6db74 } /* Literal.Date */
+  .shell .highlight .m { color: #ae81ff } /* Literal.Number */
+  .shell .highlight .s { color: #e6db74 } /* Literal.String */
+  .shell .highlight .na { color: #a6e22e } /* Name.Attribute */
+  .shell .highlight .nb { color: #f8f8f2 } /* Name.Builtin */
+  .shell .highlight .nc { color: #a6e22e } /* Name.Class */
+  .shell .highlight .no { color: #66d9ef } /* Name.Constant */
+  .shell .highlight .nd { color: #a6e22e } /* Name.Decorator */
+  .shell .highlight .ni { color: #f8f8f2 } /* Name.Entity */
+  .shell .highlight .ne { color: #a6e22e } /* Name.Exception */
+  .shell .highlight .nf { color: #a6e22e } /* Name.Function */
+  .shell .highlight .nl { color: #f8f8f2 } /* Name.Label */
+  .shell .highlight .nn { color: #f8f8f2 } /* Name.Namespace */
+  .shell .highlight .nx { color: #a6e22e } /* Name.Other */
+  .shell .highlight .py { color: #f8f8f2 } /* Name.Property */
+  .shell .highlight .nt { color: #f92672 } /* Name.Tag */
+  .shell .highlight .nv { color: #f8f8f2 } /* Name.Variable */
+  .shell .highlight .ow { color: #f92672 } /* Operator.Word */
+  .shell .highlight .w { color: #f8f8f2 } /* Text.Whitespace */
+  .shell .highlight .mb { color: #ae81ff } /* Literal.Number.Bin */
+  .shell .highlight .mf { color: #ae81ff } /* Literal.Number.Float */
+  .shell .highlight .mh { color: #ae81ff } /* Literal.Number.Hex */
+  .shell .highlight .mi { color: #ae81ff } /* Literal.Number.Integer */
+  .shell .highlight .mo { color: #ae81ff } /* Literal.Number.Oct */
+  .shell .highlight .sa { color: #e6db74 } /* Literal.String.Affix */
+  .shell .highlight .sb { color: #e6db74 } /* Literal.String.Backtick */
+  .shell .highlight .sc { color: #e6db74 } /* Literal.String.Char */
+  .shell .highlight .dl { color: #e6db74 } /* Literal.String.Delimiter */
+  .shell .highlight .sd { color: #e6db74 } /* Literal.String.Doc */
+  .shell .highlight .s2 { color: #e6db74 } /* Literal.String.Double */
+  .shell .highlight .se { color: #ae81ff } /* Literal.String.Escape */
+  .shell .highlight .sh { color: #e6db74 } /* Literal.String.Heredoc */
+  .shell .highlight .si { color: #e6db74 } /* Literal.String.Interpol */
+  .shell .highlight .sx { color: #e6db74 } /* Literal.String.Other */
+  .shell .highlight .sr { color: #e6db74 } /* Literal.String.Regex */
+  .shell .highlight .s1 { color: #e6db74 } /* Literal.String.Single */
+  .shell .highlight .ss { color: #e6db74 } /* Literal.String.Symbol */
+  .shell .highlight .bp { color: #f8f8f2 } /* Name.Builtin.Pseudo */
+  .shell .highlight .fm { color: #a6e22e } /* Name.Function.Magic */
+  .shell .highlight .vc { color: #f8f8f2 } /* Name.Variable.Class */
+  .shell .highlight .vg { color: #f8f8f2 } /* Name.Variable.Global */
+  .shell .highlight .vi { color: #f8f8f2 } /* Name.Variable.Instance */
+  .shell .highlight .vm { color: #f8f8f2 } /* Name.Variable.Magic */
+  .shell .highlight .il { color: #ae81ff } /* Literal.Number.Integer.Long */
+  
+  /* Syntax Highlighting for all other code blocks */
+  
+  .highlight .hll { background-color: #ffffcc }
+  .highlight  { background: #f0f3f3; }
+  .highlight .c { color: #0099FF; font-style: italic } /* Comment */
+  .highlight .err { color: #AA0000; background-color: #FFAAAA } /* Error */
+  .highlight .k { color: #006699; font-weight: bold } /* Keyword */
+  .highlight .o { color: #555555 } /* Operator */
+  .highlight .ch { color: #0099FF; font-style: italic } /* Comment.Hashbang */
+  .highlight .cm { color: #0099FF; font-style: italic } /* Comment.Multiline */
+  .highlight .cp { color: #009999 } /* Comment.Preproc */
+  .highlight .cpf { color: #0099FF; font-style: italic } /* Comment.PreprocFile */
+  .highlight .c1 { color: #0099FF; font-style: italic } /* Comment.Single */
+  .highlight .cs { color: #0099FF; font-weight: bold; font-style: italic } /* Comment.Special */
+  .highlight .gd { background-color: #FFCCCC; border: 1px solid #CC0000 } /* Generic.Deleted */
+  .highlight .ge { font-style: italic } /* Generic.Emph */
+  .highlight .gr { color: #FF0000 } /* Generic.Error */
+  .highlight .gh { color: #003300; font-weight: bold } /* Generic.Heading */
+  .highlight .gi { background-color: #CCFFCC; border: 1px solid #00CC00 } /* Generic.Inserted */
+  .highlight .go { color: #AAAAAA } /* Generic.Output */
+  .highlight .gp { color: #000099; font-weight: bold } /* Generic.Prompt */
+  .highlight .gs { font-weight: bold } /* Generic.Strong */
+  .highlight .gu { color: #003300; font-weight: bold } /* Generic.Subheading */
+  .highlight .gt { color: #99CC66 } /* Generic.Traceback */
+  .highlight .kc { color: #006699; font-weight: bold } /* Keyword.Constant */
+  .highlight .kd { color: #006699; font-weight: bold } /* Keyword.Declaration */
+  .highlight .kn { color: #006699; font-weight: bold } /* Keyword.Namespace */
+  .highlight .kp { color: #006699 } /* Keyword.Pseudo */
+  .highlight .kr { color: #006699; font-weight: bold } /* Keyword.Reserved */
+  .highlight .kt { color: #007788; font-weight: bold } /* Keyword.Type */
+  .highlight .m { color: #FF6600 } /* Literal.Number */
+  .highlight .s { color: #CC3300 } /* Literal.String */
+  .highlight .na { color: #330099 } /* Name.Attribute */
+  .highlight .nb { color: #336666 } /* Name.Builtin */
+  .highlight .nc { color: #00AA88; font-weight: bold } /* Name.Class */
+  .highlight .no { color: #336600 } /* Name.Constant */
+  .highlight .nd { color: #9999FF } /* Name.Decorator */
+  .highlight .ni { color: #999999; font-weight: bold } /* Name.Entity */
+  .highlight .ne { color: #CC0000; font-weight: bold } /* Name.Exception */
+  .highlight .nf { color: #CC00FF } /* Name.Function */
+  .highlight .nl { color: #9999FF } /* Name.Label */
+  .highlight .nn { color: #00CCFF; font-weight: bold } /* Name.Namespace */
+  .highlight .nt { color: #330099; font-weight: bold } /* Name.Tag */
+  .highlight .nv { color: #003333 } /* Name.Variable */
+  .highlight .ow { color: #000000; font-weight: bold } /* Operator.Word */
+  .highlight .w { color: #bbbbbb } /* Text.Whitespace */
+  .highlight .mb { color: #FF6600 } /* Literal.Number.Bin */
+  .highlight .mf { color: #FF6600 } /* Literal.Number.Float */
+  .highlight .mh { color: #FF6600 } /* Literal.Number.Hex */
+  .highlight .mi { color: #FF6600 } /* Literal.Number.Integer */
+  .highlight .mo { color: #FF6600 } /* Literal.Number.Oct */
+  .highlight .sa { color: #CC3300 } /* Literal.String.Affix */
+  .highlight .sb { color: #CC3300 } /* Literal.String.Backtick */
+  .highlight .sc { color: #CC3300 } /* Literal.String.Char */
+  .highlight .dl { color: #CC3300 } /* Literal.String.Delimiter */
+  .highlight .sd { color: #CC3300; font-style: italic } /* Literal.String.Doc */
+  .highlight .s2 { color: #CC3300 } /* Literal.String.Double */
+  .highlight .se { color: #CC3300; font-weight: bold } /* Literal.String.Escape */
+  .highlight .sh { color: #CC3300 } /* Literal.String.Heredoc */
+  .highlight .si { color: #AA0000 } /* Literal.String.Interpol */
+  .highlight .sx { color: #CC3300 } /* Literal.String.Other */
+  .highlight .sr { color: #33AAAA } /* Literal.String.Regex */
+  .highlight .s1 { color: #CC3300 } /* Literal.String.Single */
+  .highlight .ss { color: #FFCC33 } /* Literal.String.Symbol */
+  .highlight .bp { color: #336666 } /* Name.Builtin.Pseudo */
+  .highlight .fm { color: #CC00FF } /* Name.Function.Magic */
+  .highlight .vc { color: #003333 } /* Name.Variable.Class */
+  .highlight .vg { color: #003333 } /* Name.Variable.Global */
+  .highlight .vi { color: #003333 } /* Name.Variable.Instance */
+  .highlight .vm { color: #003333 } /* Name.Variable.Magic */
+  .highlight .il { color: #FF6600 } /* Literal.Number.Integer.Long */
+  </style>
+</head>
+<body data-gr-c-s-loaded="true">
+<h1 id="lab-1-explore-your-datacenter">Lab 1: Explore Your Datacenter</h1>
+<p>Duration: 15 minutes</p>
+<p>In this lab, you will log into your lab instance and learn more about your Consul datacenter.</p>
+<ul>
+<li>Task 1: Log in to your lab instance</li>
+<li>Task 2: Explore your Consul datacenter</li>
+<li>Task 3: View the agent configuration</li>
+<li>Task 4: Learn about the other Consul configuration options</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>To get started you will need:</p>
+<ul>
+<li>The IP address of your lab instance</li>
+<li>Username</li>
+<li>Password</li>
+<li>2 terminal windows</li>
+</ul>
+<p>The login credentials were sent to you before this class, but the instructor will also have this information incase you missed the messages.</p>
+<p><strong>Windows Users</strong>: Install <a href="https://docs.microsoft.com/en-us/windows/wsl/about">Windows Subsystem for Linux</a> so that the commands in the lab book will run in your environment. Otherwise you will need to translate the commands for a Windows environment. (We recommend choosing Ubuntu as your distribution.)</p>
+<h2 id="task-1-log-in-to-your-lab-instance-and-discover-consul">Task 1: Log in to your lab instance and discover Consul</h2>
+<p>To begin, let's find our way around the lab instance and the pre-installed Consul server.</p>
+<h3 id="step-1-set-local-environment-variables">Step 1: Set local environment variables</h3>
+<p>During the many lab sessions, you'll need to login to your lab instance several times, sometimes with 4-5 terminals at once. It will be easier if you set local environment variables for your lab instance's IP and username. You can enter them into each new terminal session. Or to make them persistent, append the below export commands to your shell profile, which should be in a file called <code>~/.&lt;your-shell&gt;rc</code> (for example <code>~/.bashrc</code>).</p>
+<pre class="sh"><code class="highlight">$ <span class="nb">export</span> <span class="nv">LAB_IP</span><span class="o">=</span>&lt;your IP address&gt;
+</code></pre>
+<pre class="sh"><code class="highlight">$ <span class="nb">export</span> <span class="nv">LAB_USER</span><span class="o">=</span>&lt;lab_user_name&gt;
+</code></pre>
+<p>If you decide to add the variables to your shell profile, you will need to load the modification into any new terminals. Replace <code>&lt;your-shell&gt;</code> with the name of your shell.</p>
+<pre class="sh"><code class="highlight">$ <span class="nb">source</span> ~/.&lt;your-shell&gt;rc
+</code></pre>
+<p>Setting the above en will let you copy commands that include <code>$LAB_IP</code> and <code>$LAB_USER</code> directly, rather than modifying them with your specific IP.</p>
+<p>You may also want to use a tool like <code>ssh-copy-id</code> to copy your public key to the lab instance, which will let you interact with the lab instance from your local machine without entering the password each time.</p>
+<pre class="sh"><code class="highlight">$ ssh-copy-id <span class="nv">$LAB_USER</span>@<span class="nv">$LAB_IP</span>
+</code></pre>
+<h3 id="step-2-log-in-to-lab-instance">Step 2: Log in to lab instance</h3>
+<p>Login to your lab instance from your local laptop using the username, IP address, and password.</p>
+<pre class="sh"><code class="highlight">$ ssh -L <span class="m">8500</span>:localhost:8500 <span class="nv">$LAB_USER</span>@<span class="nv">$LAB_IP</span>
+</code></pre>
+<p>On a Mac or Linux-based operating system, this sets up a local SSH tunnel that will surface port 8500 from the datacenter to your local machine.</p>
+<p>After logging in, you will be greeted with a welcome message and some information about your datacenter.</p>
+<pre class="text"><code class="highlight">Welcome to HashiCorp official training! We are very excited to
+have you on board for this event. This is your official training
+instance. Almost all commands and operations will happen on this
+workstation.
+
+Your official training animal identity is:
+
+    consul-101-labs-ant
+
+Please do not lose this identity as it will be important in
+completing this training course. Have a great day!
+</code></pre>
+<p>Please let your instructor know as soon as possible if you have any issues accessing your lab server.</p>
+<h2 id="task-2-explore-your-consul-server">Task 2: Explore your Consul server</h2>
+<h3 id="step-1-run-a-few-consul-commands">Step 1: Run a few Consul commands</h3>
+<p>Consul is already installed and running on the machine. Run a few informational commands to verify the presence of <code>consul</code>.</p>
+<pre class="sh"><code class="highlight">$ consul version
+</code></pre>
+<p>The output should look like this.</p>
+<pre class="sh"><code class="highlight">Consul v1.5.3
+Protocol <span class="m">2</span> spoken by default, understands <span class="m">2</span> to <span class="m">3</span> <span class="o">(</span>agent will automatically use protocol &gt;2 when speaking to compatible agents<span class="o">)</span>
+</code></pre>
+<p>Run the following commands to get output of other nodes in the datacenter if there are any, some debugging info, and a stream of live log output.</p>
+<p>First, check you datacneter membership.</p>
+<pre class="sh"><code class="highlight">$ consul members
+</code></pre>
+<p>Consul will provide output similar to this:</p>
+<pre class="sh"><code class="highlight">Node                      Address          Status  Type    Build  Protocol  DC   Segment
+consul-training-server-2  <span class="m">10</span>.1.1.7:8301    alive   server  <span class="m">1</span>.2.2  <span class="m">2</span>         dc1  &lt;all&gt;
+</code></pre>
+<p>How many agents are in your datacenter? Are they in "server" or "client" mode?</p>
+<p>Next, discover more information about your datacenter.</p>
+<pre class="sh"><code class="highlight">$ consul info
+</code></pre>
+<p>What components and communication protocols do you recognize from lecture?</p>
+<p>What information would you find useful from this output?</p>
+<h3 id="step-2-view-the-consul-web-ui-on-your-local-machine">Step 2: View the Consul Web UI on your local machine</h3>
+<p>It helps to monitor the Consul Web UI while making changes to the datacenter.</p>
+<p>You can now access the Consul Web UI at <a href="http://localhost:8500/ui/">localhost:8500/ui/</a>.</p>
+<p>In the UI you should notice your one Consul server under the "nodes" tab. Go ahead and explore the other tabs. Since we are just starting, the UI should be empty. As we progress through these labs continue to check back in the UI to monitor changes!</p>
+<h2 id="task-3-view-the-configuration-file">Task 3: View the configuration file</h2>
+<p>Using the terminal text editor of your choice open the Consul agent configuration file, or use <code>cat</code> to print the file.</p>
+<pre class="sh"><code class="highlight">$ cat /etc/consul.d/config.json
+</code></pre>
+<p>The configuration is minimal for setting up a single server. Notice that, <code>server: true</code>, this configures the Consul agent to run in server mode. We have also enabled the UI, set the name of the node, and configured the data directory. The data directory is where the server saves the datacenter state.</p>
+<h2 id="task-4-learn-about-the-other-consul-configuration-options">Task 4: Learn about the other Consul configuration options</h2>
+<p>Review the server and client configuration options, and their defaults, in the Consul documentation.</p>
+<p>https://www.consul.io/docs/agent/options.html</p>
+<p>When deploying Consul in production, you will want to consider using the following options.</p>
+<ul>
+<li>ACL and encryption options for securing your datacenter.</li>
+<li>Connect options for enabling and configuring Consul Connect.</li>
+<li>Customizable domain option, which causes Consul to respond to DNS queries in different domains than the default <code>consul</code> domain.</li>
+<li>The <code>retry_join</code> option for listing address of other agents in the datacenter to join upon starting up.</li>
+<li>The <code>bootstrap_expect</code> option lets Consul know that there will be "x" servers installed in this datacenter. Consul will wait until all are available before leader election takes places.</li>
+</ul>
+<h2 id="advanced">Advanced</h2>
+<h3 id="section-questions">Section Questions</h3>
+<p>Find someone who has also completed the lab and discuss the following questions with them.</p>
+<ol style="list-style-type: decimal">
+<li><p>What are some advantages of separating client and server responsibilities?</p></li>
+<li><p>List the Consul server responsibilities.</p></li>
+<li><p>How many servers are recommended for production deployments?</p></li>
+<li><p>[T/F] The servers must complete the leader election process before the datacenter can function.</p></li>
+</ol>
+<h1 id="lab-2-service-discovery">Lab 2: Service Discovery</h1>
+<p>Duration: 30 minutes</p>
+<p>Learn how to register services with Consul and use Consul DNS to discover healthy services.</p>
+<ul>
+<li>Task 1: Start a counting service</li>
+<li>Task 2: Start the dashboard service using service discovery</li>
+<li>Task 3: Reconfigure and reload a service</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>Please let your instructor know as soon as possible if you have any issues accessing your lab server.</p>
+<p>Many of the services in this lab will run in the foreground of the terminal window you start them in, so you will need to open new windows after launching them.</p>
+<h2 id="task-1-start-a-counting-service">Task 1: Start a Counting Service</h2>
+<h3 id="step-1-create-a-service-registration-file">Step 1: Create a Service Registration File</h3>
+<p>Create the configuration for the counting service. Start by creating the configuration file <code>counting.json</code> using vim (instructions below), or nano.</p>
+<pre class="sh"><code class="highlight">$ vim /etc/consul.d/counting.json
+</code></pre>
+<p>Next, paste the following configuration into your new file by copying it from the lab notebook, selecting your terminal window, typing <code>i</code> to switch to vim's insert mode, and then pasting the contents of the file.</p>
+<pre class="json"><code class="highlight"><span class="p">{</span>
+  <span class="nt">"service"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"counting"</span><span class="p">,</span>
+    <span class="nt">"port"</span><span class="p">:</span> <span class="mi">9003</span><span class="p">,</span>
+    <span class="nt">"check"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"counting-check"</span><span class="p">,</span>
+      <span class="nt">"http"</span><span class="p">:</span> <span class="s2">"http://localhost:9003/health"</span><span class="p">,</span>
+      <span class="nt">"method"</span><span class="p">:</span> <span class="s2">"GET"</span><span class="p">,</span>
+      <span class="nt">"interval"</span><span class="p">:</span> <span class="s2">"1s"</span><span class="p">,</span>
+      <span class="nt">"timeout"</span><span class="p">:</span> <span class="s2">"1s"</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+<p>To save the file and quit vim, press the <code>Escape</code> key, which will switch vim out of insert mode. Type <code>:wq</code>, which will appear at the bottom of your terminal window, and then press the <code>Enter</code> key. This will to switch to normal mode (<code>:</code>), write the file (<code>w</code>), and quit vim (<code>q</code>), returning you to the terminal.</p>
+<p>Note the major elements of the configuration file:</p>
+<ul>
+<li>Name of service</li>
+<li>Port</li>
+<li>Health check</li>
+<li>HTTP destination of health check</li>
+</ul>
+<h3 id="step-2-register-the-counting-service-with-consul">Step 2: Register the Counting Service with Consul</h3>
+<p>Consul does not automatically reload new or updated configuration files. Manually trigger a reload now.</p>
+<pre class="sh"><code class="highlight">$ consul reload
+</code></pre>
+<p>Consul will output this message.</p>
+<pre class="sh"><code class="highlight">Configuration reload triggered
+</code></pre>
+<p>You can find the service registered in the UI or find it by issuing the <code>consul catalog</code> command.</p>
+<pre class="sh"><code class="highlight">$ consul catalog services
+</code></pre>
+<p>Consul will output a list of registered services, including the counting service.</p>
+<pre class="sh"><code class="highlight">consul
+counting
+nomad-client
+</code></pre>
+<h3 id="step-3-start-the-counting-service">Step 3: Start the Counting Service</h3>
+<p>The <code>counting-service</code> has been installed on your machine and is in your <code>PATH</code>. All its configuration is supplied via environment variables, so the only one we need to specify is the <code>PORT</code>, which will be <code>9003</code> as configured above.</p>
+<p>Start the counting service and configure its port with the following command. It will run in the foreground of your terminal window; no need to wait for it to exit.</p>
+<pre class="sh"><code class="highlight">$ <span class="nv">PORT</span><span class="o">=</span><span class="m">9003</span> counting-service
+</code></pre>
+<p>In a browser window, go to your machine's IP address at port 9003 and view the output of the running service. If you don't remember your IP address you can find it by running <code>echo $LAB_IP</code>. Replace the environment variable in the below URL with your real IP address.</p>
+<p>http://:9003/</p>
+<p>There should be some JSON in your browser window. For example:</p>
+<pre class="json"><code class="highlight"><span class="p">{</span><span class="nt">"count"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="nt">"hostname"</span><span class="p">:</span><span class="s2">"kait-consul-ant.node.consul"</span><span class="p">}</span>
+</code></pre>
+<h2 id="task-2-start-a-dashboard-service">Task 2: Start a Dashboard Service</h2>
+<p>Next you'll start a dashboard service that uses the counting service.</p>
+<h3 id="step-1-create-the-service-registration-file">Step 1: Create the Service Registration File</h3>
+<p>Leave the counting service running and open a new SSH connection to your lab instance by opening a new terminal window and ssh-ing into your lab instance.</p>
+<pre class="sh"><code class="highlight">$ ssh <span class="nv">$LAB_USER</span>@<span class="nv">$LAB_IP</span>
+</code></pre>
+<p>Create the configuration file for the dashboard service using vim or nano.</p>
+<pre class="sh"><code class="highlight">$ vim /etc/consul.d/dashboard.json
+</code></pre>
+<p>Copy the contents of the below configuration, type <code>i</code> in your terminal to switch vim to insert mode, and paste the following configuration into the new file.</p>
+<pre class="json"><code class="highlight"><span class="p">{</span>
+  <span class="nt">"service"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"dashboard"</span><span class="p">,</span>
+    <span class="nt">"port"</span><span class="p">:</span> <span class="mi">9002</span><span class="p">,</span>
+    <span class="nt">"check"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"dashboard-check"</span><span class="p">,</span>
+      <span class="nt">"http"</span><span class="p">:</span> <span class="s2">"http://localhost:9002/health"</span><span class="p">,</span>
+      <span class="nt">"method"</span><span class="p">:</span> <span class="s2">"GET"</span><span class="p">,</span>
+      <span class="nt">"interval"</span><span class="p">:</span> <span class="s2">"1s"</span><span class="p">,</span>
+      <span class="nt">"timeout"</span><span class="p">:</span> <span class="s2">"1s"</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+<p>To save the file and quit <code>vim</code>, press the <code>Escape</code> key, then type <code>:wq</code>, which will appear at the bottom of the window. Press <code>Enter</code> to save the file and exit.</p>
+<h3 id="step-2-register-the-dashboard-service-with-consul">Step 2: Register the Dashboard Service with Consul</h3>
+<p>Consul does not automatically reload new or updated configuration files, so you will need to manually trigger a reload.</p>
+<pre class="sh"><code class="highlight">$ consul reload
+</code></pre>
+<p>Consul will output this message.</p>
+<pre class="sh"><code class="highlight">Configuration reload triggered
+</code></pre>
+<p>You can find the service registered in the UI or find it by issuing the <code>consul catalog</code> command.</p>
+<pre class="sh"><code class="highlight">$ consul catalog services
+</code></pre>
+<p>Consul will output a list of services, now including the dashboard service.</p>
+<pre class="sh"><code class="highlight">consul
+counting
+dashboard
+nomad-client
+</code></pre>
+<h3 id="step-3-start-the-dashboard-service">Step 3: Start the Dashboard Service</h3>
+<p>The <code>dashboard-service</code> has been installed on your machine and is in your <code>PATH</code>. It gets all its configuration via environment variables. You will use these to supply the PORT on which to run the <code>dashboard</code> service and the URL of the pre-existing counting service.</p>
+<p>Start the dashboard service with the PORT and counting service URL configured using the following command.</p>
+<pre class="sh"><code class="highlight">$ <span class="nv">PORT</span><span class="o">=</span><span class="m">9002</span> <span class="nv">COUNTING_SERVICE_URL</span><span class="o">=</span><span class="s2">"http://counting.service.consul:9003"</span> dashboard-service
+</code></pre>
+<p><strong>NOTE</strong>: Quotes are required around the URL since it contains shell-specific characters.</p>
+<p>The dashboard service will run in the foreground and stream counts from the counting service into your terminal window. Let it continue to run.</p>
+<p>In a browser, go to your machine's IP address at port 9002 and view the output of the running dashboard service. There will be a pink background with a number that counts upward. The page also displays the name of the host that is being used as the backend <code>counting</code> service.</p>
+<p>http://:9002/</p>
+<h3 id="step-4-explore-consul-dns">Step 4: Explore Consul DNS</h3>
+<p>The dasboard service is using Consul's service discovery to find a healthy instance of the counting service based on the service's record, <code>counting.service.consul</code>, and port number, which you included as environment variables in the dashboard's start command.</p>
+<p>Discover what Consul will find when it looks for the counting service by running the DNS query yourself and inspecting the output.</p>
+<p>Leave the dashboard service running and open a new SSH connection to your lab instance by opening a new terminal window and ssh-ing into your lab instance.</p>
+<pre class="sh"><code class="highlight">$ ssh <span class="nv">$LAB_USER</span>@<span class="nv">$LAB_IP</span>
+</code></pre>
+<p>Now ask Consul service discovery to give you the SRV record for the counting service.</p>
+<pre class="sh"><code class="highlight">$ dig @127.0.0.1 -p <span class="m">8600</span> counting.service.consul SRV
+</code></pre>
+<p>Consul will return the SRV record for the counting service, including an IP address and port.</p>
+<pre class="sh"><code class="highlight"><span class="p">;</span> &lt;&lt;&gt;&gt; DiG <span class="m">9</span>.10.3-P4-Ubuntu &lt;&lt;&gt;&gt; @127.0.0.1 -p <span class="m">8600</span> counting.service.consul SRV
+<span class="p">;</span> <span class="o">(</span><span class="m">1</span> server found<span class="o">)</span>
+<span class="p">;;</span> global options: +cmd
+<span class="p">;;</span> Got answer:
+<span class="p">;;</span> -&gt;&gt;HEADER<span class="s">&lt;&lt;- opco</span>de: QUERY, status: NOERROR, id: <span class="m">584</span>
+<span class="p">;;</span> flags: qr aa rd<span class="p">;</span> QUERY: <span class="m">1</span>, ANSWER: <span class="m">1</span>, AUTHORITY: <span class="m">0</span>, ADDITIONAL: <span class="m">3</span>
+<span class="p">;;</span> WARNING: recursion requested but not available
+
+<span class="p">;;</span> OPT PSEUDOSECTION:
+<span class="p">;</span> EDNS: version: <span class="m">0</span>, flags:<span class="p">;</span> udp: <span class="m">4096</span>
+<span class="p">;;</span> QUESTION SECTION:
+<span class="p">;</span>counting.service.consul.   IN  SRV
+
+<span class="p">;;</span> ANSWER SECTION:
+counting.service.consul. <span class="m">0</span>  IN  SRV <span class="m">1</span> <span class="m">1</span> <span class="m">9003</span> kait-consul-ant.node.dc1.consul.
+
+<span class="p">;;</span> ADDITIONAL SECTION:
+kait-consul-ant.node.dc1.consul. <span class="m">0</span> IN   A   <span class="m">10</span>.1.1.233
+kait-consul-ant.node.dc1.consul. <span class="m">0</span> IN   TXT <span class="s2">"consul-network-segment="</span>
+
+<span class="p">;;</span> Query time: <span class="m">0</span> msec
+<span class="p">;;</span> SERVER: <span class="m">127</span>.0.0.1#8600<span class="o">(</span><span class="m">127</span>.0.0.1<span class="o">)</span>
+<span class="p">;;</span> WHEN: Fri May <span class="m">24</span> <span class="m">20</span>:08:29 UTC <span class="m">2019</span>
+<span class="p">;;</span> MSG SIZE  rcvd: <span class="m">155</span>
+</code></pre>
+<p>There is one answer since we have registered one instance of the counting service.</p>
+<h2 id="task-3-reconfigure-and-reload-a-service">Task 3: Reconfigure and reload a service</h2>
+<p>Consul services can be reconfigured on the fly without downtime. Most service changes can be reloaded with the <code>consul reload</code> command.</p>
+<p>https://www.consul.io/docs/commands/reload.html</p>
+<h3 id="step-1-reconfigure-the-dashboard-service">Step 1: Reconfigure the dashboard service</h3>
+<p>Open the <code>counting</code> service configuration file.</p>
+<pre class="sh"><code class="highlight">$ vim /etc/consul.d/counting.json
+</code></pre>
+<p>Edit the service configuration by adding an extra tag such as <code>golang</code> or <code>javascript</code> or <code>v2</code>. It might resemble something like this. (The health check has been omitted from the below code snippet but you should leave it in your service definition.)</p>
+<pre class="js"><code class="highlight"><span class="p">{</span>
+  <span class="s2">"service"</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">"name"</span><span class="o">:</span> <span class="s2">"counting"</span><span class="p">,</span>
+    <span class="s2">"tags"</span><span class="o">:</span> <span class="p">[</span><span class="s2">"golang"</span><span class="p">],</span>
+    <span class="s2">"port"</span><span class="o">:</span> <span class="s2">"9003"</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+<p>Type <code>i</code> in your terminal to switch vim to insert mode, and add a tag to the configuration file.</p>
+<p>To save the file and quit <code>vim</code>, press the <code>Escape</code> key, then type <code>:wq</code>, which will appear at the bottom of the window. Press <code>Enter</code> to save the file and exit.</p>
+<h3 id="step-2-reload-consul">Step 2: Reload Consul</h3>
+<p>A subset of service configurations, including tags, can be reloaded with the <code>reload</code> command.</p>
+<p>Run the <code>reload</code> command.</p>
+<pre class="sh"><code class="highlight">$ consul reload
+</code></pre>
+<p>You'll get the usual output.</p>
+<p>Go to Consul's web UI and verify that your tag is present on your instance of the <code>counting</code> service.</p>
+<h2 id="advanced">Advanced</h2>
+<p>Restart your <code>dashboard</code> service with an environment variable that will discover a <code>counting</code> service tagged with your newly defined tag.</p>
+<h3 id="section-questions">Section Questions</h3>
+<p>Find someone who has also completed the lab and discuss the following questions with them.</p>
+<ol style="list-style-type: decimal">
+<li><p>What are the three methods for adding service registrations to Consul clients?</p></li>
+<li><p>Why should Consul provide users with more than one way to register services?</p></li>
+<li><p>Who registers services with the Consul servers? The operator or Consul client?</p></li>
+<li><p>[T/F] Health checks enable Consul to remove unhealthy services from the registry.</p></li>
+<li><p>[T/F] Health checks are added to all services by default.</p></li>
+</ol>
+<h1 id="lab-3-service-mesh-with-consul-connect">Lab 3: Service Mesh with Consul Connect</h1>
+<p>Duration: 45 minutes</p>
+<p>This lab demonstrates how to connect services securely with Consul Connect.</p>
+<ul>
+<li>Task 1: Reconfigure the dashboard service and securely connect it to the counting service with proxies</li>
+<li>Task 2: Enforce access with intentions</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>You'll need a login to your personal lab instance. We will be opening several terminal windows and several SSH sessions in order to launch all necessary services and proxies, so have your username, IP address, and password at hand.</p>
+<h2 id="task-1-securely-connect-dashboard-to-counting-with-proxies">Task 1: Securely connect dashboard to counting with proxies</h2>
+<p>For this exercise, you'll configure the dashboard service to only communicate over a loopback interface, then start two proxies to securely connect the dashboard service to the counting service.</p>
+<h3 id="step-1-reconfigure-and-launch-the-dashboard-service">Step 1: Reconfigure and launch the dashboard service</h3>
+<p>As you saw when we configured it previously, the <code>dashboard-service</code> gets its configuration via environment variables. You will now reconfigure the <code>dashboard-service</code> using the environment variable <code>COUNTING_SERVICE_URL</code> to look for the counting service on <code>localhost:9001</code>, instead of asking Consul DNS for its location.</p>
+<p>This ensures that the dashboard service only communicates locally, and relies on a proxy for communication with other services. In a future step, we'll define a proxy to supply this connection.</p>
+<p>Find the terminal window running the <code>dashboard-service</code> and stop it.</p>
+<pre class="tx"><code>Ctrl+c</code></pre>
+<p>Then Restart it with the new counting service location using the following command.</p>
+<pre class="sh"><code class="highlight">$ <span class="nv">PORT</span><span class="o">=</span><span class="m">9002</span> <span class="nv">COUNTING_SERVICE_URL</span><span class="o">=</span><span class="s2">"http://localhost:9001"</span> dashboard-service
+</code></pre>
+<p>Consul will return an output that confirms the configured value of <code>COUNTING_SERVICE_URL</code>.</p>
+<pre class="sh"><code class="highlight">Starting server on http://0.0.0.0:9002
+<span class="o">(</span>Pass as PORT environment variable<span class="o">)</span>
+Using counting service at http://localhost:9001
+</code></pre>
+<p>The counting service will run in the foreground.</p>
+<p>If you navigate to the browser window where the dashboard is running you will notice that it is no longer counting up and instead shows an error that the counting service is unreachable. In the next steps we will set up proxies for the counting and dashboard services that will allow them to securely communicate.</p>
+<h3 id="step-2-start-a-proxy-for-the-counting-service">Step 2: Start a proxy for the counting service</h3>
+<p>You will start a proxy for the <code>counting</code> service first. You'll use Consul's built-in proxy, but for production applications you would want to use Envoy, HAProxy, or another proxy application.</p>
+<p>Leave the counting service running, open a new terminal window and ssh into your lab instance.</p>
+<pre class="sh"><code class="highlight">$ ssh <span class="nv">$LAB_USER</span>@<span class="nv">$LAB_IP</span>
+</code></pre>
+<p>Find your lab private IP address by navigating in a browser to the consul web UI at <code>http://localhost:8500/ui</code>. Once there, select the "Nodes" menu item and click on your lab instance. In the top right corner of the UI page for your instance, you'll find the instance's private IP address. Click it to copy it to your clipboard.</p>
+<p>Set the private IP as an environment variable. Don't forget to replace the placeholder with the private IP address.</p>
+<pre class="sh"><code class="highlight">$ <span class="nb">export</span> <span class="nv">LAB_PRIVATE_IP</span><span class="o">=</span>&lt;private IP here&gt;
+</code></pre>
+<p>Now you're ready to set up the <code>counting</code> service's proxy. The command to do this has a few important components.</p>
+<ul>
+<li><code>-service</code> declares the name of the service being provided by this proxy.</li>
+<li><code>-service-addr</code> describes where the service is (most likely on the local machine). We're running the counting service at port <code>9003</code> so that is mentioned here.</li>
+<li><code>-listen</code> is an IP address and port that will be used to communicate with other proxies. The IP address cannot be <code>0.0.0.0</code> or <code>localhost</code> (or any variation). The port is arbitrary but must not conflict with other ports in use on this node. Pick a large number or a random number that is accessible from the network.</li>
+<li><code>-register</code> announces the service to the Consul catalog so it will appear in the Consul Web UI and be discoverable by other Connect proxies.</li>
+</ul>
+<pre class="sh"><code class="highlight">$ consul connect proxy <span class="se">\</span>
+      -service<span class="o">=</span>counting <span class="se">\</span>
+      -service-addr<span class="o">=</span><span class="m">127</span>.0.0.1:9003 <span class="se">\</span>
+      -listen<span class="o">=</span><span class="nv">$LAB_PRIVATE_IP</span>:19003 <span class="se">\</span>
+      -register
+</code></pre>
+<p>The proxy will run in the foreground of your terminal window.</p>
+<pre class="sh"><code class="highlight"><span class="o">==</span>&gt; Consul Connect proxy starting...
+    Configuration mode: Flags
+               Service: counting
+       Public listener: <span class="m">10</span>.1.2.211:19003 <span class="o">=</span>&gt; <span class="m">127</span>.0.0.1:9003
+</code></pre>
+<p>To verify successful launch of the proxy, find the <code>counting-proxy</code> service in the Consul Web UI. You will also notice output in the terminal that shows successful registration of your service. The proxy will continue to run in the foreground.</p>
+<pre class="plaintext"><code>proxy: registered Consul service: counting-proxy</code></pre>
+<h3 id="step-3-start-a-proxy-for-the-dashboard-service">Step 3: Start a proxy for the dashboard service</h3>
+<p>Finally, start a proxy for the dashboard service that surfaces the upstream <code>counting</code> service at <code>localhost:9001</code>.</p>
+<p>Leave the counting proxy running, open a new terminal window and ssh into your lab instance.</p>
+<pre class="sh"><code class="highlight">$ ssh <span class="nv">$LAB_USER</span>@<span class="nv">$LAB_IP</span>
+</code></pre>
+<p>Since the dashboard proxy is essentially acting as a client, the command to launch it is simpler than the one needed to launch the <code>counting</code> proxy.</p>
+<ul>
+<li><code>-service</code> describes the service we represent on this node (<code>dashboard</code>)</li>
+<li><code>-upstream</code> identifies the service we want to connect to (<code>counting</code>). It also includes the port number that we can read from on localhost in order to talk to the <code>counting</code> service (<code>9001</code>).</li>
+</ul>
+<pre class="sh"><code class="highlight">$ consul connect proxy <span class="se">\</span>
+       -service<span class="o">=</span>dashboard <span class="se">\</span>
+       -upstream<span class="o">=</span><span class="s2">"counting:9001"</span>
+</code></pre>
+<p>The proxy will stream output to your terminal window.</p>
+<pre class="sh"><code class="highlight"><span class="o">==</span>&gt; Consul Connect proxy starting...
+    Configuration mode: Flags
+              Service: dashboard
+             Upstream: <span class="nv">counting</span> <span class="o">=</span>&gt; :9001
+      Public listener: Disabled
+</code></pre>
+<p>The proxy will run in the foreground.</p>
+<p>Verify that the services are connected by revisiting the dashboard service in your web browser. It should show a valid number and the name of the host it is connected to.</p>
+<p><strong>NOTE</strong>: Because we are running several services on the same machine in this lab exercise, we are running the <code>counting</code> service on port <code>9003</code> but read from it on <code>localhost:9001</code>. We do this in order to avoid port conflicts on a single node. In multi-node setups, it's common to configure upstream proxies to use the same port that the service would use if it were running locally. (For example, PostgreSQL runs on port <code>5432</code> so it would be configured to appear on <code>localhost:5432</code> through an upstream proxy.)</p>
+<h2 id="task-2-enforce-access-with-intentions">Task 2: Enforce access with intentions</h2>
+<p>Consul Connect intentions define services that are allowed to (or denied from) communicating with other services. You can set intentions via the web UI, the command line, or the HTTP API. We will use the web UI.</p>
+<p>You will configure intentions to allow communication between only the dashboard and counting services.</p>
+<h3 id="step-1-deny-all-by-default">Step 1: Deny all by default</h3>
+<p>First, you should set a default policy of deny all to ensure only authorized services can communicate.</p>
+<p>Open the Consul Web UI. Go to the "Intentions" screen. Click the "Create" button.</p>
+<p>Select <code>* (All Services)</code> from both the source and destination dropdown menus.</p>
+<p>Click the <code>DENY</code> radio button and save the intention.</p>
+<p>Go back to the dashboard service in your web browser. It should display a message that "Counting service is unreachable."</p>
+<h3 id="step-2-allow-dashboard-to-connect-to-counting">Step 2: Allow dashboard to connect to counting</h3>
+<p>In the web UI, create a new intention that allows a source of <code>dashboard</code> to reach a destination of <code>counting</code>. Save the intention.</p>
+<p>The dashboard will connect and show a positive count again (and the name of the host it connects to).</p>
+<h2 id="advanced">Advanced</h2>
+<p>Use the command line to check the status of intentions.</p>
+<p>https://www.consul.io/docs/commands/intention/check.html</p>
+<h3 id="section-questions">Section Questions</h3>
+<p>Find someone who has also completed the lab and discuss the following questions with them.</p>
+<ol style="list-style-type: decimal">
+<li><p>When you enable Consul Connect, what kinds of intentions might you want to put in place right away? How would this be different if you were enabling it in a brand new datacenter compared to one where services are already running?</p></li>
+<li>How can you use Consul Connect proxies and intentions to restrict service-to-service communication?</li>
+<li><p>What kinds of common monitoring might Connect proxies help you implement? What might your monitoring stack look like?</p></li>
+<li><p>What kinds of services might you not want to add to a service mesh and why?</p></li>
+</ol>
+<h1 id="lab-4-keyvalue-store">Lab 4: Key/Value Store</h1>
+<p>Duration: 20 minutes</p>
+<p>This lab demonstrates how to use the key value store</p>
+<ul>
+<li>Task 1: Add a value to the store</li>
+<li>Task 2: Watch for changes in the Key/Value store</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>You will need 1 additional terminal window.</p>
+<h2 id="task-1-add-a-value-to-the-store">Task 1: Add a value to the store</h2>
+<h3 id="step-1-store-the-hashicorp-street-address">Step 1: Store the HashiCorp street address</h3>
+<p>Leave the dashboard proxy running from the previous lab, open a new terminal window and ssh into your lab instance.</p>
+<pre class="sh"><code class="highlight">$ ssh <span class="nv">$LAB_USER</span>@<span class="nv">$LAB_IP</span>
+</code></pre>
+<p>Use either the CLI or the web UI to store the HashiCorp street address under your lab instance's animal name.</p>
+<pre class="sh"><code class="highlight">$ consul kv put &lt;your-animal-name&gt;/hashicorp/street_address <span class="s2">"101 2nd St, San Francisco, CA"</span>
+</code></pre>
+<p>Consul will output this message.</p>
+<pre class="sh"><code class="highlight">Success! Data written to: badger/hashicorp/street_address
+</code></pre>
+<p>Use either the CLI or the UI to verify that it was saved correctly. Don't forget to use your animal name.</p>
+<pre class="sh"><code class="highlight">$ consul kv get &lt;your-animal-name&gt;/hashicorp/street_address
+</code></pre>
+<h3 id="step-2-get-detailed-information-about-the-key">Step 2: Get detailed information about the key</h3>
+<p>Use the <code>-detailed</code> flag to look at the data you stored. Don't forget to use your animal name.</p>
+<pre class="sh"><code class="highlight">$ consul kv get -detailed &lt;your-animal-name&gt;/hashicorp/street_address
+</code></pre>
+<p>Consul will output more information about the key/value pair.</p>
+<pre class="sh"><code class="highlight">CreateIndex      <span class="m">35</span>
+Flags            <span class="m">0</span>
+Key              badger/hashicorp/street_address
+LockIndex        <span class="m">0</span>
+ModifyIndex      <span class="m">35</span>
+Session          -
+Value            <span class="m">101</span> 2nd St
+</code></pre>
+<h3 id="step-3-store-a-few-more-values">Step 3: Store a few more values</h3>
+<p>Store the following keys and values by issuing <code>consul kv put</code> three times, each time replacing your animal name and the following color keys and values.</p>
+<ol style="list-style-type: decimal">
+<li><code>&lt;your-animal-name&gt;/colors/red   "#FF0000"</code></li>
+<li><code>&lt;your-animal-name&gt;/colors/green "#00FF00"</code></li>
+<li><code>&lt;your-animal-name&gt;/colors/blue  "#0000FF"</code></li>
+</ol>
+<p>For example:</p>
+<pre class="sh"><code class="highlight">$ consul kv put badger/colors/red   <span class="s2">"#FF0000"</span>
+</code></pre>
+<h3 id="step-4-use--keys-and--recurse-arguments">Step 4: Use -keys and -recurse arguments</h3>
+<p>Use the <code>-keys</code> and <code>-recurse</code> arguments and view the output. A trailing slash may be significant! Try the command with and without it.</p>
+<pre class="sh"><code class="highlight">$ consul kv get -keys &lt;your-animal-name&gt;/
+</code></pre>
+<p>Consul will return the key prefixes under your animal name.</p>
+<pre class="sh"><code class="highlight">ant/colors/
+ant/hashicorp/
+</code></pre>
+<pre class="sh"><code class="highlight">$ consul kv get -recurse &lt;your-animal-name&gt;
+</code></pre>
+<p>Consul will return all the keys and values under your animal name.</p>
+<pre class="sh"><code class="highlight">ant/colors/blue:#0000FF
+ant/colors/green:#00FF00
+ant/colors/red:#FF0000
+ant/hashicorp/street_address:101 2nd St, San Francisco, CA
+</code></pre>
+<pre class="sh"><code class="highlight">$ consul kv get -recurse &lt;your-animal-name&gt;/c
+</code></pre>
+<p>Consul will return all the keys and values under the <code>colors</code> prefix.</p>
+<pre class="sh"><code class="highlight">ant/colors/blue:#0000FF
+ant/colors/green:#00FF00
+ant/colors/red:#FF0000
+</code></pre>
+<h2 id="task-2-watch-for-changes-in-the-keyvalue-store">Task 2: Watch for changes in the Key/Value store</h2>
+<p>In this section you will set up a watch on one of your keys, and update a file when the value changes.</p>
+<h3 id="step-1-create-the-watch-file">Step 1: Create the watch file</h3>
+<p>Your workstation has a basic executable file pre-populated at <code>/etc/consul.d/colors.sh</code>. Open the file.</p>
+<pre class="sh"><code class="highlight">$ vim /etc/consul.d/colors.sh
+</code></pre>
+<p>This executable will print a message to watcher.txt when you make an update. Note, for this simple example the update is not dynamic. Even though the watch will re-write the file every time you make an update, the sentence is static so the file contents will not change.</p>
+<p>Type <code>i</code> to put vim into insert mode and substitute your animal name into the file.</p>
+<pre class="sh"><code class="highlight"><span class="ch">#!/usr/bin/env bash</span>
+<span class="nb">echo</span> <span class="s2">"The &lt;your-animal-name&gt;/colors/green key has been updated"</span> &gt; /etc/consul.d/watcher.txt
+</code></pre>
+<p>Press the <code>Escape</code> key, type <code>:wq</code>, then press <code>Enter</code> to save your changes and return to the command line.</p>
+<h3 id="step-2-create-a-watch">Step 2: Create a watch</h3>
+<p>Next, use the CLI to create a watch for a Key. Remember to substitute in your animal name.</p>
+<pre class="sh"><code class="highlight">$ consul watch -type<span class="o">=</span>key -key<span class="o">=</span>&lt;your-animal-name&gt;/colors/green /etc/consul.d/colors.sh
+</code></pre>
+<p>Any time the key <code>&lt;your-animal-name&gt;/colors/green</code> is updated it will run our simple executable.</p>
+<h3 id="step-3-update-the-values">Step 3: Update the values</h3>
+<p>Finally, update the key. Don't forget to substitute in your animal name.</p>
+<pre class="sh"><code class="highlight">$ consul kv put &lt;your-animal-name&gt;/colors/green <span class="s2">"#7FFF00"</span>
+</code></pre>
+<p>You should now find a file called <code>watcher.txt</code> in the configuration directory.</p>
+<pre class="sh"><code class="highlight">$ cat /etc/consul.d/watcher.txt
+</code></pre>
+<p>Consul will output this message.</p>
+<pre class="sh"><code class="highlight">The ant/colors/green key has been updated
+</code></pre>
+<p>Can you list a few use cases where the watch tool would be helpful?</p>
+<h2 id="advanced">Advanced</h2>
+<p>How might you store the contents of a file in Consul? When experimenting, use a sub-path of your animal name (<code>badger/nginx-config</code>).</p>
+<p><strong>NOTE</strong>: Consul values are limited to 512kb.</p>
+<h3 id="section-questions">Section Questions</h3>
+<p>Find someone who has also completed the lab and discuss the following questions with them.</p>
+<ol style="list-style-type: decimal">
+<li><p>How might you decide who should have what access to Consul KV? How might their access depend on their role?</p></li>
+<li><p>What types of data could you store in the KV?</p></li>
+</ol>
+<h1 id="lab-5-consul-template">Lab 5: Consul Template</h1>
+<p>Duration: 30 minutes</p>
+<p>This lab demonstrates how to render configuration data and services to files with <code>consul-template</code>. This is useful for both the Service Configuration and Service Discovery use cases. You can use <code>consul-template</code> with data saved in Consul KV to update configurations files, or with service discovery data to dynamically update load balancer configuration with a list of healthy services.</p>
+<ul>
+<li>Task 1: Render a single key's contents to a template</li>
+<li>Task 2: Render a list of all healthy services to a load balancer configuration file</li>
+<li>Task 3: (Advanced and Optional) Use <code>envconsul</code></li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>The <code>consul-template</code> tool has installed on your machine.</p>
+<p>The <code>counting</code> service should be running.</p>
+<p>You'll need 1 additional terminal or to kill the watch process from the previous lab.</p>
+<h2 id="task-1-render-a-single-keys-contents-to-a-template">Task 1: Render a single key's contents to a template</h2>
+<p>Start by extracting a single value to a template.</p>
+<h3 id="step-1-create-a-template-file">Step 1: Create a template file</h3>
+<p>Templates use <a href="https://golang.org/pkg/text/template/">Go text/template</a> syntax with additional help from <a href="https://github.com/hashicorp/consul-template">Consul</a>. If you've used the Hugo static site generator or other Go-based tools that use templates, you may already be familiar with Go template syntax.</p>
+<p>Start by using the <code>key</code> syntax to display the value of the HashiCorp street address as stored earlier.</p>
+<p>Use vim or nano to create a file named <code>address-config.tpl</code>.</p>
+<pre class="sh"><code class="highlight">$ vim address-config.tpl
+</code></pre>
+<p>Press <code>i</code> and paste in the following template with the path to your copy of the HashiCorp street address (using your animal name).</p>
+<pre class="sh"><code class="highlight"><span class="c1"># address-config.tpl</span>
+The HashiCorp Address is:
+<span class="o">{{</span> key <span class="s2">"&lt;your-animal-name&gt;/hashicorp/street_address"</span> <span class="o">}}</span>
+</code></pre>
+<p>Save the file by pressing <code>Escape</code>, typing <code>:wq</code> and pressing <code>Enter</code>.</p>
+<h3 id="step-2-render-the-template-with-data-from-consul">Step 2: Render the template with data from Consul</h3>
+<p>Run the following command to dynamically render the template. It will print the rendered contents to the terminal every time new data is received via an edge trigger.</p>
+<pre class="sh"><code class="highlight">$ consul-template -template<span class="o">=</span><span class="s2">"address-config.tpl:rendered.txt:cat rendered.txt"</span>
+</code></pre>
+<h3 id="step-3-change-the-street_address-value">Step 3: Change the street_address value</h3>
+<p>Edit the <code>street_address</code> value either through the web UI (for example, add "USA" to the end of the address) or with the CLI. Observe that the template will render itself and print the new contents to the screen.</p>
+<p>Type <code>CTRL-C</code> to stop the template process.</p>
+<h2 id="task-2-render-a-list-of-all-healthy-services-to-load-balancer-configuration-file">Task 2: Render a list of all healthy services to load balancer configuration file</h2>
+<p>Consul's template feature isn't limited to user-defined data. You can also query services, datacenters, and other metadata or live service data. This is a common case for integrating third party load balancers with Consul DNS. In this task you will populate an HAProxy configuration with the IP addresses of the counting service.</p>
+<h3 id="step-1-create-a-template-file-1">Step 1: Create a template file</h3>
+<p>Create a new file for your new template called <code>service-config.tpl</code>.</p>
+<pre class="sh"><code class="highlight">$ vim service-config.tpl
+</code></pre>
+<p>Type <code>i</code> to switch vim to insert mode, and paste the following template into the file.</p>
+<pre class="sh"><code class="highlight"><span class="c1"># service-config.tpl</span>
+global
+  maxconn <span class="o">{{</span>key <span class="s2">"haproxy/maxconn"</span><span class="o">}}</span>
+backend counting_servers
+  balance <span class="o">{{</span>key <span class="s2">"haproxy/balance_type"</span><span class="o">}}</span>
+  server <span class="o">{{</span> range service <span class="s2">"counting"</span> <span class="o">}}</span> <span class="o">{{</span> .Address <span class="o">}}</span>:<span class="o">{{</span>.Port<span class="o">}}</span> <span class="o">{{</span> end <span class="o">}}</span>
+</code></pre>
+<p>Save the file by pressing the <code>Escape</code> key and then typing <code>:wq</code> followed by the <code>Enter</code> key.</p>
+<p>This template will create an example HAProxy configuration file with instances of the counting service, a number of max connections, and balance type. The <code>range</code> keyword will iterate around a list, in this case all <code>service</code> objects associated with the <code>counting</code> service.</p>
+<h3 id="step-2-run-the-template-command">Step 2: Run the template command</h3>
+<p>As before, start the consul-template process.</p>
+<pre class="sh"><code class="highlight">$ consul-template -template<span class="o">=</span><span class="s2">"service-config.tpl:haproxy.conf:cat haproxy.conf"</span>
+</code></pre>
+<p>The process will run in the foreground.</p>
+<p>Add <code>haproxy/maxconn</code> with a value of <code>22</code> and <code>haproxy/balance_type</code> with a value of <code>roundrobin</code> to your key-value store, using the web UI or CLI. To use the web UI, make sure you are on the top-level Key/Value page of the web UI and click the blue <code>Create</code> button to add new keys and values.</p>
+<p>You should notice the following output in the terminal once you've added both values. Notice the IP address of the counting service displayed at the bottom of the output.</p>
+<pre class="bash"><code class="highlight"><span class="c1"># service-config.tpl</span>
+global
+  maxconn <span class="m">22</span>
+backend counting_servers
+  balance roundrobin
+  server  <span class="m">10</span>.1.1.219:9003
+</code></pre>
+<p>The template should also be rendered to haproxy.conf.</p>
+<h3 id="step-3-kill-the-counting-service">Step 3: Kill the Counting Service</h3>
+<p>Test that consul-template is watching for service changes by killing your <code>counting</code> service. Navigate to the terminal where the <code>counting</code> service is running and issue a stop command <code>ctrl-c</code>. If you can't find the terminal window, open a new one, ssh into your lab instance, and issue <code>pkill counting</code>.</p>
+<p>The file will update and print in the process output. Notice that this time, no IP address is listed.</p>
+<pre class="sh"><code class="highlight"><span class="c1"># service-config.tpl</span>
+global
+  maxconn <span class="m">22</span>
+backend counting_servers
+  balance roundrobin
+  server
+</code></pre>
+<p>Note, the template will still render but since no instances are available it will no longer show the IP address of the service.</p>
+<p>Cancel the template with <code>Ctrl-C</code>.</p>
+<p>If you want to do the next two optional labs, keep on going. If you will to skip the optional labs, then you're done with your lab instances for the rest of the course! You'll perform the final lab locally on your computer. We'll leave the lab instances up for a short amount of time after the course in case you need to log back in.</p>
+<h3 id="advanced-and-optional-step-4-load-balancing-with-nginx">Advanced and Optional Step 4: Load balancing with NGINX</h3>
+<p>Render an NGINX configuration file that lists your dashboard service.</p>
+<p>This and other examples can be found in the <code>examples</code> directory of the <code>consul-template</code> repository.</p>
+<p>https://github.com/hashicorp/consul-template/tree/master/examples</p>
+<h2 id="advanced-and-optional-task-3-use-envconsul">Advanced and Optional Task 3: Use envconsul</h2>
+<p>Envconsul is another tool that you can use to copy Consul keys and values to a sub-process environment. It is more blunt than the detailed control you get with a template, but can still be useful. Learn more about Envconsul in its GitHub repo.</p>
+<p>https://github.com/hashicorp/envconsul</p>
+<h3 id="step-1-inject-values-into-a-temporary-environment">Step 1: Inject values into a temporary environment</h3>
+<p>Using your animal name and the list of colors you entered into Consul, inject a sub-set of all keys (just <code>&lt;your-animal-name&gt;/colors</code>) into the <code>env</code>. The <code>-pristine</code> flag will include just the environment variables included in the prefix. Remember to substitute your animal name.</p>
+<pre class="sh"><code class="highlight">$ envconsul -pristine -prefix &lt;your-animal-name&gt;/colors/ env
+</code></pre>
+<p>Envconsul will output your colors.</p>
+<pre class="sh"><code class="highlight"><span class="nv">blue</span><span class="o">=</span><span class="c1">#0000FF</span>
+<span class="nv">green</span><span class="o">=</span><span class="c1">#00FF00</span>
+<span class="nv">red</span><span class="o">=</span><span class="c1">#FF0000</span>
+</code></pre>
+<p><strong>NOTE</strong>: The <code>red</code> and other variables will no longer be in your shell environment after the <code>env</code> sub-process exits.</p>
+<h3 id="step-2-inject-values-into-a-python-one-liner">Step 2: Inject values into a Python one liner</h3>
+<p>Do the same thing, but simulate a more full featured script. We'll use a Python one liner to print only the value of the <code>red</code> key.</p>
+<p>This one liner looks for sub-keys of <code>&lt;your-animal-name&gt;/colors</code> and sends all sub-keys and values to a <code>python</code> snippet. Remember to replace your animal name.</p>
+<pre class="sh"><code class="highlight">$ envconsul -prefix<span class="o">=</span><span class="s2">"&lt;your-animal-name&gt;/colors"</span> <span class="s2">"python -c \"import os; print(os.environ['red'])\""</span>
+</code></pre>
+<p>Consul will output only the red value.</p>
+<pre class="sh"><code class="highlight"><span class="c1">#FF0000</span>
+</code></pre>
+<p>Envconsul is useful if you have a full featured script and want to send some keys and values from Consul. The script can iterate around environment variables or do whatever else it needs to find and use the data.</p>
+<h3 id="step-3-inject-capitalized-keys-into-a-pristine-shell">Step 3: Inject capitalized keys into a pristine shell</h3>
+<p>Additional arguments can transform the keys and values extracted from Consul, or limit injected keys to only the ones found in Consul.</p>
+<p>Use the <code>upcase</code> and <code>pristine</code> flags to open a new <code>bash</code> shell with your colors as environment variables. Remember to replace your animal name.</p>
+<pre class="sh"><code class="highlight">$ envconsul -prefix<span class="o">=</span><span class="s2">"&lt;your-animal-name&gt;/colors"</span> -upcase -pristine /bin/bash
+</code></pre>
+<p>A different command prompt will appear in the same terminal window.</p>
+<p>Explore the values in the environment.</p>
+<pre class="sh"><code class="highlight">$ <span class="nb">echo</span> <span class="nv">$RED</span>
+</code></pre>
+<p>Envconsul will output the value.</p>
+<pre class="sh"><code class="highlight"><span class="c1">#FF0000</span>
+</code></pre>
+<pre class="sh"><code class="highlight">$ <span class="nb">echo</span> <span class="nv">$GREEN</span>
+</code></pre>
+<p>Envconsul will output the value.</p>
+<pre class="sh"><code class="highlight"><span class="c1">#00FF00</span>
+</code></pre>
+<pre class="sh"><code class="highlight">$ <span class="nb">echo</span> <span class="nv">$BLUE</span>
+</code></pre>
+<p>Envconsul will output the value.</p>
+<pre class="sh"><code class="highlight"><span class="c1">#0000FF</span>
+</code></pre>
+<p>Use <code>exit</code> when done and you will be returned to the parent shell.</p>
+<pre class="sh"><code class="highlight">$ <span class="nb">exit</span>
+</code></pre>
+<p>Congratulations, you're now done with your lab instances for the rest of the course! You'll perform the final lab locally on your computer. We'll leave the lab instances up for a short amount of time after the course in case you need to log back in.</p>
+<h1 id="lab-6-getting-started-with-a-local-consul-agent">Lab 6: Getting Started with a Local Consul Agent</h1>
+<p>Duration: 25 minutes</p>
+<p>This lab demonstrates how to launch Consul locally in development mode.</p>
+<ul>
+<li>Task 1: Start a local Consul development server</li>
+<li>Task 2: Store a key and value in Consul</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>This lab will run on your local computer. Open a new terminal window or type <code>exit</code> into one of your previous ones.</p>
+<p>Download a copy of Consul for your platform from the download page.</p>
+<p>https://www.consul.io/downloads.html.</p>
+<p>Unzip the file you downloaded. This zip command works on Mac and Linux-based machines, but you can unzip the file however you are used to.</p>
+<pre class="sh"><code class="highlight">$ unzip ~/Downloads/consul.zip
+</code></pre>
+<p>You can either move the binary to your path or run it from its current location.</p>
+<p>To copy the binary to your PATH run the following command (or the equivalent one for Windows).</p>
+<pre class="sh"><code class="highlight">$ mv ~/Downloads/consul ~/bin
+</code></pre>
+<p>If you want to run the binary from its current location, every time we use the <code>consul</code> command, prefix it with its fully qualified path. For example:</p>
+<pre class="sh"><code class="highlight">$ ~/Downloads/consul version
+</code></pre>
+<h2 id="task-1-start-a-local-consul-development-server">Task 1: Start a local Consul development server</h2>
+<p>Let's start a development server and view the Consul Web UI.</p>
+<h3 id="step-1">Step 1</h3>
+<p>Start the Consul development server with this command:</p>
+<pre class="sh"><code class="highlight">$ consul agent -dev -ui
+</code></pre>
+<p>Consul will stream logs in the foreground of your terminal window. Scroll up to find a message confirming that the server has started.</p>
+<pre class="plaintext"><code>==&gt; Starting Consul agent...
+           Version: 'v1.6.0'
+           Node ID: 'a7d3c712-0141-7d11-34e2-6a28753f44f9'
+         Node name: 'Judiths-MBP.lan'
+        Datacenter: 'dc1' (Segment: '&lt;all&gt;')
+            Server: true (Bootstrap: false)
+       Client Addr: [127.0.0.1] (HTTP: 8500, HTTPS: -1, gRPC: 8502, DNS: 8600)
+      Cluster Addr: 127.0.0.1 (LAN: 8301, WAN: 8302)
+           Encrypt: Gossip: false, TLS-Outgoing: false, TLS-Incoming: false, Auto-Encrypt-TLS: false
+
+==&gt; Log data will now stream in as it occurs:</code></pre>
+<p>Notice that your agent is in server mode, bootstrap is set to false, and has been assigned a node-id.</p>
+<p>Note, an agent in <code>-dev</code> mode has all persistence disabled and the server will only keep data in-memory. Do not run <code>-dev</code> mode agents in production.</p>
+<h2 id="step-2-ensure-consul-is-running">Step 2: Ensure Consul is running</h2>
+<p>To ensure Consul is running properly, issue any Consul command. Note, you will need a new terminal window; do not stop the Consul agent.</p>
+<pre class="sh"><code class="highlight">$ consul catalog nodes
+</code></pre>
+<p>You should notice your single node if the server is running properly.</p>
+<pre class="sh"><code class="highlight">Node             ID        Address    DC
+Judiths-MBP.lan  a7d3c712  <span class="m">127</span>.0.0.1  dc1
+</code></pre>
+<h2 id="access-the-consul-web-ui">Access the Consul Web UI</h2>
+<p>Verify that the Consul UI is running by opening your web browser to,</p>
+<p>http://localhost:8500/</p>
+<p>Click around to explore the (mostly empty) UI with services, nodes, keys, and other features pages.</p>
+<h2 id="task-2-store-a-key-and-value-in-consul">Task 2: Store a key and value in Consul</h2>
+<p>In the same terminal window, run some <code>consul kv</code> commands to store simple data.</p>
+<h3 id="step-1-1">Step 1</h3>
+<p>Store the location of Consul's online learning platform.</p>
+<pre class="sh"><code class="highlight">$ consul kv put learn learn.hashicorp.com/consul
+</code></pre>
+<p>Consul will output this message.</p>
+<pre class="sh"><code class="highlight">Success! Data written to: learn
+</code></pre>
+<p>Visit the <strong>Key/Value</strong> section of the web UI. Navigate to the <code>learn</code> key. You should notice "learn.hashicopr.com/consul" as the value.</p>
+<h3 id="step-2">Step 2</h3>
+<p>Verify the value on the command line by reading it.</p>
+<pre class="sh"><code class="highlight">$ consul kv get learn
+</code></pre>
+<p>Consul will output the value.</p>
+<pre class="sh"><code class="highlight">learn.hashicorp.com/consul
+</code></pre>
+<p>Consul is capable of much more, but this is a start!</p>
+<p>You may stop the Consul server by navigating to the window where it is running in the foreground and issuing <code>CTRL-C</code>.</p>
+<h2 id="advanced">Advanced</h2>
+<p>For an extra challenge, read the Consul CLI documentation and start an agent that stores its data in a persistent data directory.</p>
+<p>Verify that the data directory was used by looking for subdirectories inside the data directory. What contents are stored there?</p>
+<p>https://www.consul.io/docs/index.html</p>
+
+
+</body></html>
